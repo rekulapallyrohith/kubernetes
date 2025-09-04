@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.deployment.name}}
+spec:
+  minReadySeconds: 5
+  replicas: {{.Values.deployment.replicas}}
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - web
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: {{.Values.deployment.image}}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 10M
+            limits:
+              cpu: 500m
+              memory: 128M
+          ports:
+            - name: httpd
+              protocol: TCP
+              containerPort: {{.Values.deployment.containerPort}}
+          startupProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+            tcpSocket:
+              port: 80
+          livenessProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+            httpGet:
+              path: /
+              port: 80

@@ -1,0 +1,63 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deploy
+spec:
+  minReadySeconds: 5
+  replicas: 4
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - web
+          - nginx
+          - apache
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.29
+          resources:
+            requests:
+              cpu: 100m
+              memory: 10M
+            limits:
+              cpu: 500m
+              memory: 128M
+          ports:
+            - name: httpd
+              protocol: TCP
+              containerPort: 80
+          startupProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+            tcpSocket:
+              port: 80
+          livenessProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+            httpGet:
+              path: /
+              port: 80

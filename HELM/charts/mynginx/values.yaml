@@ -1,0 +1,14 @@
+service:
+  name: nginx-service
+  type: LoadBalancer
+  selector:
+    app: web
+  ports:
+    port: 80
+    targetPort: 80
+    protocol: TCP
+deployment:
+  name: nginx-deploy
+  replicas: 2
+  image: nginx:latest
+  containerPort: 80

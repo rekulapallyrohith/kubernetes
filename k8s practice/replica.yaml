@@ -1,0 +1,33 @@
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: repica
+  labels:
+    app: nginx
+    me: controller
+    type: rs
+spec:
+  minReadySeconds: 5
+  replicas: 6
+  selector:
+    matchLabels:
+      app: web
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: web
+        env: dev
+        srv: nginx
+    spec:
+      containers:
+        - name: web
+          image: nginx   
+          resources:
+            requests:
+              cpu: 100m
+              memory: 10M
+            limits:
+              cpu: 500m
+              memory: 256M

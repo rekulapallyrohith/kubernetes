@@ -1,0 +1,15 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-internal
+spec:
+  type: clusterIP
+  selector:
+    app: web
+  ports:
+    - name: http
+      port: 80
+      targetport: 80
+      protocol: TCP
+  

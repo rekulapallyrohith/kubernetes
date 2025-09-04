@@ -1,0 +1,22 @@
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: daemon
+spec:
+  minReadySeconds: 5
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web2
+    spec:
+      containers:
+        - name: alp
+          image: alpine:latest
+          args:
+            - sleep
+            - 1d

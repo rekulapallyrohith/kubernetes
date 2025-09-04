@@ -1,0 +1,17 @@
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: mysql-fromcm
+  labels:
+    app: web
+spec:
+  containers:
+    - name: mysql-fromcm
+      image: mysql:lts
+      ports:
+        - containerPort: 3306
+      envFrom:
+        - configMapRef:
+            name: mysql-cm
+            optional: False
