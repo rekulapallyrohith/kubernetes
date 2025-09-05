@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Pod
 metadata: 
@@ -20,3 +21,11 @@ spec:
       persistentVolumeClaim: 
         claimName: mysql-pvc
         readOnly: false
+---  
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata: 
+  name: mysql-retain
+provisioner: disk.csi.azure.com
+reclaimPolicy: Retain
+---
