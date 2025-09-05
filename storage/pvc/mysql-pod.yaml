@@ -11,6 +11,10 @@ spec:
           value: "password"
       ports:
         - containerPort: 3306
+      volumeMounts:
+        - mountPath: "/var/lib/mysql"
+          name: mysql-volume
+          readOnly: false
   volumes:
     - name: mysql-volume
       persistentVolumeClaim: 
